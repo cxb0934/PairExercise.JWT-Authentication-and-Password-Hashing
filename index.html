@@ -47,11 +47,13 @@
       constructor(){
         super();
         this.state = {
-          auth: {}
+          auth: {},
+          notes: [],
         };
         this.signIn = this.signIn.bind(this);
         this.logout = this.logout.bind(this);
       }
+
       logout(){
         window.localStorage.removeItem('token');
         this.setState({ auth: {}});
@@ -66,7 +68,9 @@
           });
           this.setState({ auth: response.data });
         }
+        console.log(">>>", this.state);
       }
+
       componentDidMount(){
         this.attemptTokenLogin();
       }
@@ -76,6 +80,7 @@
         window.localStorage.setItem('token', token);
         this.attemptTokenLogin();
       }
+
       render(){
         const { auth } = this.state;
         const { signIn, logout } = this;

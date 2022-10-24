@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const {
-  models: { User },
+  models: { User, Note },
 } = require("./db");
 const path = require("path");
 
@@ -27,6 +27,16 @@ app.get("/api/auth", async (req, res, next) => {
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.status || 500).send({ error: err.message });
+});
+
+app.get("/api/users/:id/notes", async (req, res, next) => {
+  try {
+    console.log(">>>", req.params);
+    const user = await User.findByPk(req.params.id);
+    res.send(await user.getNotes());
+  } catch (ex) {
+    next(ex);
+  }
 });
 
 module.exports = app;
